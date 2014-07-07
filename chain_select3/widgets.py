@@ -54,8 +54,11 @@ class ChainedSelectWidget(Select):
     def render(self, name, value, attrs=None, choices=()):
         if value is None:
             value = ''
-        attrs.update(dict(self.datas, **{'class': 'chained'}))
+        
+        attrs.update(dict(self.datas))
         final_attrs = self.build_attrs(attrs, name=name)
+        final_attrs['class'] = final_attrs['class'] + ' chained'
+        
         output = [u'<select%s>' % flatatt(final_attrs)]
         options = self.render_options(choices, [value])
         if options:
