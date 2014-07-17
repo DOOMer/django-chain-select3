@@ -34,10 +34,15 @@ class ChainedSelectWidget(Select):
             )
         js += (static('chained_selects/delayed_fill.js'), )
 
-    def __init__(self, parent_name, app_name, model_name, method_name,
+    def __init__(self, parent_name, app_name, model_name, method_name, parent_id=None,
                                                         *args, **kwargs):
+        if parent_id is not None:
+            _parent_id = parent_id
+        else:
+            _parent_id = 'id_%s' % parent_name
+
         self.datas = {
-            'data-parent-id': 'id_%s' % parent_name,
+            'data-parent-id': _parent_id,
             'data-url': (
                 '/%(prefix)s'
                 '/%(app_name)s'
@@ -57,7 +62,11 @@ class ChainedSelectWidget(Select):
         
         attrs.update(dict(self.datas))
         final_attrs = self.build_attrs(attrs, name=name)
-        final_attrs['class'] = final_attrs['class'] + ' chained'
+
+        try:
+            final_attrs['class'] = final_attrs['class'] + ' chained'
+        except KeyError:
+            final_attrs['class'] = 'chained'
         
         output = [u'<select%s>' % flatatt(final_attrs)]
         options = self.render_options(choices, [value])
