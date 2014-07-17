@@ -1,8 +1,15 @@
 # coding: utf8
 
+import json
+from django import get_version
 from django.db.models import get_model
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.utils.encoding import force_text, force_str
+
+try:
+    from django.hhtp import JsonResponse
+except ImportError:
+    from .http import JsonResponse
 
 
 def filterchain_all(request, app_name, model_name, method_name, pk):
@@ -15,4 +22,9 @@ def filterchain_all(request, app_name, model_name, method_name, pk):
     for item in results:
         final[item.pk] = force_str(item)
 
-    return JsonResponse(final)
+    if int(get_version().split(".")[1]) < 7:
+        return JsonResponse(content=final)
+    else:
+        return JsonResponse(final)
+
+
