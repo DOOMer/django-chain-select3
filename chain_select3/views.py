@@ -22,7 +22,7 @@ def filterchain_all(request, app_name, model_name, method_name, pk):
     for item in results:
         final[item.pk] = force_str(item)
 
-    if int(get_version().split(".")[1]) < 7:
+    if int(get_version().split(".")[1][0]) < 7:
         return JsonResponse(content=final)
     else:
         return JsonResponse(final)
