@@ -55,8 +55,6 @@ class ChainedSelectWidget(Select):
         if filter is not None:
             data_url +=  filter + '/'
 
-        print("du ", data_url)
-
         self.datas = {
             'data-parent-id': _parent_id,
             'data-url': data_url,
